@@ -409,9 +409,13 @@ static void CheckLongDouble() {
     Require(nextafterl_nid_postfix(1.0L, 1.0L) == 1.0L && !std::signbit(nextafterl_nid_postfix(-0.0L, 0.0L)));
     Require(nextafterl_nid_postfix(std::numeric_limits<long double>::max(), std::numeric_limits<long double>::infinity()) == std::numeric_limits<long double>::infinity());
     Require(std::isnan(nextafterl_nid_postfix(std::numeric_limits<long double>::quiet_NaN(), 1.0L)));
+    Require(nextafterl_nid_postfix(-0.0L, 1.0L) == std::numeric_limits<long double>::denorm_min());
+    Require(nextafterl_nid_postfix(-0.0L, -1.0L) == -std::numeric_limits<long double>::denorm_min());
     Require(ExtendedBits(nexttowardl_nid_postfix(1.0L, 2.0L), 0x8000000000000001ull, 0x3fff));
     Require(ExtendedBits(nexttowardl_nid_postfix(1.0L, 0.0L), 0xffffffffffffffffull, 0x3ffe));
     Require(nexttowardl_nid_postfix(1.0L, 1.0L) == 1.0L && !std::signbit(nexttowardl_nid_postfix(-0.0L, 0.0L)));
+    Require(nexttowardl_nid_postfix(-0.0L, 1.0L) == std::numeric_limits<long double>::denorm_min());
+    Require(nexttowardl_nid_postfix(-0.0L, -1.0L) == -std::numeric_limits<long double>::denorm_min());
 
     int exponent = 77;
     Require(frexpl_nid_postfix(8.0L, &exponent) == 0.5L && exponent == 4);
@@ -1172,6 +1176,8 @@ int main() {
     Require(nextafter_nid_postfix(1.0, 1.0) == 1.0 && !std::signbit(nextafter_nid_postfix(-0.0, 0.0)));
     Require(nextafter_nid_postfix(std::numeric_limits<double>::max(), std::numeric_limits<double>::infinity()) == std::numeric_limits<double>::infinity());
     Require(std::isnan(nextafter_nid_postfix(std::numeric_limits<double>::quiet_NaN(), 1.0)) && std::isnan(nextafter_nid_postfix(1.0, std::numeric_limits<double>::quiet_NaN())));
+    Require(nextafter_nid_postfix(-0.0, 1.0) == std::numeric_limits<double>::denorm_min());
+    Require(nextafter_nid_postfix(-0.0, -1.0) == -std::numeric_limits<double>::denorm_min());
     Require(nexttowardf_nid_postfix(1.f, 2.0L) == 0x1.000002p0f && nexttowardf_nid_postfix(1.f, 0.0L) == 0x1.fffffep-1f);
     Require(nexttowardf_nid_postfix(0.f, 1.0L) == std::numeric_limits<float>::denorm_min());
     Require(nexttowardf_nid_postfix(1.f, 1.0L) == 1.f && !std::signbit(nexttowardf_nid_postfix(-0.f, 0.0L)));
@@ -1179,6 +1185,8 @@ int main() {
     Require(nexttoward_nid_postfix(0.0, 1.0L) == std::numeric_limits<double>::denorm_min());
     Require(nexttoward_nid_postfix(1.0, 1.0L) == 1.0 && !std::signbit(nexttoward_nid_postfix(-0.0, 0.0L)));
     Require(std::isnan(nexttoward_nid_postfix(std::numeric_limits<double>::quiet_NaN(), 1.0L)) && std::isnan(nexttoward_nid_postfix(1.0, std::numeric_limits<long double>::quiet_NaN())));
+    Require(nexttoward_nid_postfix(-0.0, 1.0L) == std::numeric_limits<double>::denorm_min());
+    Require(nexttowardf_nid_postfix(-0.f, 1.0L) == std::numeric_limits<float>::denorm_min());
     int exponent = 0;
     Require(frexp_nid_postfix(12., &exponent) == 0.75 && exponent == 4);
     Require(frexpf_nid_postfix(-12.f, &exponent) == -0.75f && exponent == 4);
